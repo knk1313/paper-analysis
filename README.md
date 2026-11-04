@@ -16,6 +16,8 @@
 
 ## 入れ方
 
+### Claude Code
+
 ```text
 /plugin marketplace add knk1313/paper-analysis
 /plugin install paper-analysis@paper-analysis
@@ -27,6 +29,15 @@
 /plugin marketplace add knk1313/docs-rules
 /plugin install docs-rules@docs-rules
 ```
+
+### claude.aiなどのアプリ
+
+[Releases](https://github.com/knk1313/paper-analysis/releases)から`paper-analysis-vX.Y.Z.zip`を取得し、アプリのスキルの設定でアップロードします。新しい版を使うときは、新しい版のzipをアップロードし直します。zipは、リリースを公開したときにGitHub Actionsが作ります。
+
+日本語の校正も行うときは、[docs-rulesのReleases](https://github.com/knk1313/docs-rules/releases)のzipも同じようにアップロードします。アプリでは、次の点がClaude Codeと違います。
+
+- AIによる評価の費用の上限を強制できないため、読むルールのファイルを絞って行います
+- 実行環境に`pdftotext`がない場合は、PDFをページごとに読むため、引用の照合の精度が下がります
 
 ## 使い方
 

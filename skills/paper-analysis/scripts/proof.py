@@ -28,6 +28,9 @@ SEARCH_PATTERNS = [
     "~/.claude/skills/docs-rules/evaluators/score.mjs",
     "~/.claude/skills/**/docs-rules/evaluators/score.mjs",
     "./.claude/skills/docs-rules/evaluators/score.mjs",
+    # claude.ai などのアプリにzipでアップロードしたスキルの置き場所
+    "/mnt/skills/*/docs-rules/evaluators/score.mjs",
+    "/mnt/skills/**/docs-rules/evaluators/score.mjs",
 ]
 
 CITATION = re.compile(r"〔[^〕]*〕")
