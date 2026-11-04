@@ -30,6 +30,8 @@ https://arxiv.org/abs/<arXiv ID> を読み解いて
 DOI <DOI> の論文の中身を押さえたい
 ```
 
+スキルが使われないときは、`/paper-analysis` と打って呼び出してください。
+
 AIによる評価を含めて丁寧に校正したいときは「しっかり校正して」と添えてください。費用の上限は既定で0.50ドルで、環境変数 `PAPER_ANALYSIS_PROOF_BUDGET_USD` で変えられます。
 
 ## 必要なもの
