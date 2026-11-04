@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/*
+ * 色・文字・角丸は、デジタル庁デザインシステム（DADS）の design-tokens 2.0.1 の値。
+ * セマンティックの名前と、ダークモードの配色は knk1313/workspace-ui-template-dads（src/tokens/）に合わせている。
+ * 詳しくは references/design.md。
+ */
+:root {
+  color-scheme: light;
+  /* 面 */
+  --color-canvas: #f2f2f2;          /* solid-gray-50 */
+  --color-surface: #ffffff;         /* white */
+  --color-surface-muted: #f2f2f2;   /* solid-gray-50 */
+  --color-surface-strong: #e6e6e6;  /* solid-gray-100 */
+  --color-primary-surface: #e8f1fe; /* key-50 */
+  /* 文字 */
+  --color-text: #333333;            /* solid-gray-800 */
+  --color-text-strong: #1a1a1a;     /* solid-gray-900 */
+  --color-text-muted: #666666;      /* solid-gray-600 */
+  /* 線 */
+  --color-border: #949494;          /* solid-gray-420 */
+  --color-border-on-canvas: #767676;/* solid-gray-536 */
+  --color-border-table: #767676;    /* solid-gray-500 相当 */
+  --color-border-emphasis: #000000; /* black */
+  /* キーカラー・リンク */
+  --color-primary: #0017c1;         /* key-900 */
+  --color-link: #00118f;            /* blue-1000 */
+  --color-link-hover: #0017c1;      /* blue-900 */
+  --color-link-visited: #8b008b;    /* magenta-900 */
+  /* フォーカス（DADS: 黒の線と黄の帯。変更しない） */
+  --color-focus: #000000;
+  --color-focus-ring: #ffd43d;      /* yellow-300 */
+  /* 意味色 */
+  --color-warning: #806300;         /* yellow-1000 */
+  --color-warning-surface: #fbf5e0; /* yellow-50 */
+  --color-info: #0017c1;
+  --color-info-surface: #e8f1fe;
+  /* 文字の種類 */
+  --font-sans: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  --font-mono: "Noto Sans Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* 角丸 */
+  --radius-4: 0.25rem;
+  --radius-8: 0.5rem;
+  --radius-12: 0.75rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-canvas: #000000;
+    --color-surface: #1a1a1a;
+    --color-surface-muted: #333333;
+    --color-surface-strong: #333333;
+    --color-primary-surface: #000060;
+    --color-text: #f2f2f2;
+    --color-text-strong: #ffffff;
+    --color-text-muted: #b3b3b3;
+    --color-border: #767676;
+    --color-border-on-canvas: #767676;
+    --color-border-table: #949494;
+    --color-border-emphasis: #ffffff;
+    --color-primary: #9db7f9;
+    --color-link: #9db7f9;
+    --color-link-hover: #c5d7fb;
+    --color-link-visited: #ff8eff;
+    --color-focus: #ffd43d;
+    --color-focus-ring: #000000;
+    --color-warning: #ffc700;
+    --color-warning-surface: #604b00;
+    --color-info: #9db7f9;
+    --color-info-surface: #000060;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-canvas: #000000;
+  --color-surface: #1a1a1a;
+  --color-surface-muted: #333333;
+  --color-surface-strong: #333333;
+  --color-primary-surface: #000060;
+  --color-text: #f2f2f2;
+  --color-text-strong: #ffffff;
+  --color-text-muted: #b3b3b3;
+  --color-border: #767676;
+  --color-border-on-canvas: #767676;
+  --color-border-table: #949494;
+  --color-border-emphasis: #ffffff;
+  --color-primary: #9db7f9;
+  --color-link: #9db7f9;
+  --color-link-hover: #c5d7fb;
+  --color-link-visited: #ff8eff;
+  --color-focus: #ffd43d;
+  --color-focus-ring: #000000;
+  --color-warning: #ffc700;
+  --color-warning-surface: #604b00;
+  --color-info: #9db7f9;
+  --color-info-surface: #000060;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  /* text-std-16N-170 */
+  font-size: 1rem;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+}
+a { color: var(--color-link); text-underline-offset: 0.2em; }
+a:visited { color: var(--color-link-visited); }
+a:hover { color: var(--color-link-hover); text-decoration-thickness: 3px; }
+a:focus-visible, button:focus-visible, summary:focus-visible {
+  outline: 4px solid var(--color-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.layout {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+@media (min-width: 64rem) {
+  .layout { grid-template-columns: 15rem minmax(0, 1fr); padding: 2.5rem 1.5rem 5rem; }
+  .toc { position: sticky; top: 1.5rem; align-self: start; max-height: calc(100dvh - 3rem); overflow: auto; }
+}
+
+header.page {
+  grid-column: 1 / -1;
+  border-bottom: 1px solid var(--color-border-on-canvas);
+  padding-bottom: 1.25rem;
+}
+h1 {
+  margin: 0;
+  color: var(--color-text-strong);
+  /* text-std-28B-150（狭い画面）→ 32B-150 */
+  font-size: 1.75rem; font-weight: 700; line-height: 1.5; letter-spacing: 0.01em;
+}
+@media (min-width: 48rem) { h1 { font-size: 2rem; } }
+.subtitle { margin: 0.5rem 0 0; color: var(--color-text-muted); font-size: 1rem; }
+
+.toc {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-on-canvas);
+  border-radius: var(--radius-8);
+  padding: 1rem;
+}
+.toc h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem; font-weight: 700; line-height: 1.7; border: 0; padding: 0;
+}
+.toc ol { margin: 0; padding-left: 1.25rem; }
+.toc li { margin: 0.25rem 0; line-height: 1.5; }
+
+main { min-width: 0; }
+main > section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-on-canvas);
+  border-radius: var(--radius-8);
+  padding: 1.25rem 1rem;
+  margin-bottom: 1.5rem;
+}
+@media (min-width: 48rem) { main > section { padding: 1.75rem 2rem; } }
+
+main h2 {
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-primary);
+  color: var(--color-text-strong);
+  /* text-std-24B-150 */
+  font-size: 1.5rem; font-weight: 700; line-height: 1.5; letter-spacing: 0.02em;
+  scroll-margin-top: 1rem;
+}
+main h3 {
+  margin: 1.75rem 0 0.75rem;
+  color: var(--color-text-strong);
+  /* text-std-20B-150 */
+  font-size: 1.25rem; font-weight: 700; line-height: 1.5; letter-spacing: 0.02em;
+}
+main h4 {
+  margin: 1.5rem 0 0.5rem;
+  /* text-std-18B-160 */
+  font-size: 1.125rem; font-weight: 700; line-height: 1.6;
+}
+main p { margin: 0 0 1rem; }
+main ul, main ol { margin: 0 0 1rem; padding-left: 1.5rem; }
+main li { margin: 0.25rem 0; }
+main li > ul, main li > ol { margin: 0.25rem 0 0; }
+strong { color: var(--color-text-strong); }
+
+/* 根拠の場所（〔p.5 §3.2〕） */
+.cite {
+  display: inline-block;
+  margin: 0 0.125rem;
+  padding: 0 0.375rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-4);
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  /* text-dns-14N-130：補足の情報なので 14px（DADS の最小）にする */
+  font-size: 0.875rem; line-height: 1.3; letter-spacing: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 原文の引用 */
+blockquote {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--color-primary);
+  border-radius: 0 var(--radius-4) var(--radius-4) 0;
+  background: var(--color-primary-surface);
+}
+blockquote p { margin: 0; }
+blockquote p + p { margin-top: 0.5rem; }
+.quote-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--color-primary);
+  font-size: 0.875rem; font-weight: 700; line-height: 1.3;
+}
+.quote-text { font-family: var(--font-sans); }
+
+/* 論文外の補足・注意 */
+.note {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-8);
+  background: var(--color-warning-surface);
+}
+.note-label { display: block; color: var(--color-text-strong); font-weight: 700; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  padding: 0.0625rem 0.25rem;
+  border-radius: var(--radius-4);
+  background: var(--color-surface-strong);
+}
+pre {
+  margin: 0 0 1rem; padding: 0.75rem 1rem; overflow-x: auto;
+  border-radius: var(--radius-8); background: var(--color-surface-strong);
+}
+pre code { padding: 0; background: none; }
+
+/* 表（DADS テーブル：ヘッダーの下線は強調色、行の罫線） */
+.table-wrap { margin: 0 0 1rem; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 1rem; line-height: 1.5; }
+caption { text-align: left; font-weight: 700; padding-bottom: 0.5rem; }
+th, td { padding: 0.625rem 0.75rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-border-table); }
+thead th { background: var(--color-surface-strong); border-bottom: 2px solid var(--color-border-emphasis); font-weight: 700; color: var(--color-text-strong); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+hr { border: 0; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+
+footer.page {
+  grid-column: 1 / -1;
+  color: var(--color-text-muted);
+  font-size: 0.875rem; line-height: 1.5;
+}
+
+@media print {
+  body { background: #fff; }
+  .toc { display: none; }
+  .layout { display: block; }
+  main > section { border: 0; padding: 0; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <header class="page">
+    <h1>{{TITLE}}</h1>
+    {{SUBTITLE}}
+  </header>
+  <nav class="toc" aria-label="目次">
+    <h2>目次</h2>
+    {{TOC}}
+  </nav>
+  <main>
+{{BODY}}
+  </main>
+  <footer class="page">
+    <p>このレポートは、論文に書かれた内容だけを根拠にまとめたものです。〔 〕は根拠の場所（PDFのページ、節、図表）を示します。正確な内容は原文で確かめてください。{{GENERATED}}</p>
+  </footer>
+</div>
+</body>
+</html>

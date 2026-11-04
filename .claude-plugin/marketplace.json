@@ -1,0 +1,14 @@
+{
+  "name": "paper-analysis",
+  "owner": {
+    "name": "Yuta Kondo"
+  },
+  "description": "paper-analysis スキルを Claude Code プラグインとして配布するマーケットプレイス",
+  "plugins": [
+    {
+      "name": "paper-analysis",
+      "source": "./",
+      "description": "論文1本を、本文に書かれた事実だけを根拠に深く読み解き、日本語のレポート（HTML）にまとめるスキル"
+    }
+  ]
+}

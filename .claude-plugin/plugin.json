@@ -1,0 +1,9 @@
+{
+  "name": "paper-analysis",
+  "description": "論文1本を、本文に書かれた事実だけを根拠に深く読み解き、日本語のレポート（HTML）にまとめるスキル",
+  "author": {
+    "name": "Yuta Kondo"
+  },
+  "repository": "https://github.com/knk1313/paper-analysis",
+  "license": "MIT"
+}
