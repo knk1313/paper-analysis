@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# 既定ではすべての権限を外し、ジョブごとに必要なものだけを付ける
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# アクションはタグではなくコミットのSHAで固定する。タグは作者側で付け替えられるため。
+# 行末のコメントは、そのSHAに当たる版。版上げはDependabotがSHAとコメントを合わせて行う
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      # リポジトリの取得にだけ使う
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version-file: .python-version
+      - name: スクリプトの構文
+        run: python -m py_compile skills/paper-analysis/scripts/*.py
+      # 架空の論文（tests/fixtures/）で、引用の照合・HTMLへの変換・校正の除外を確かめる
+      - name: スクリプトのテスト
+        run: python -m unittest discover -s tests -v
+
+  plugin:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      # Claude Codeの版はci/plugin-validate/package-lock.jsonで固定し、Dependabotが版上げのPRを出す
+      - name: 検証で使うClaude Codeを入れる
+        run: npm ci --no-audit --no-fund
+        working-directory: ci/plugin-validate
+      - name: プラグインのマニフェストの検証
+        run: ci/plugin-validate/node_modules/.bin/claude plugin validate .
