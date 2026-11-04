@@ -64,8 +64,14 @@ def render_table(rows: list[str]) -> str:
 
     head = cells(rows[0])
     body_rows = [cells(r) for r in rows[2:]] if len(rows) > 1 and re.match(r"^\s*\|?\s*:?-{3,}", rows[1]) else [cells(r) for r in rows[1:]]
+    # 値がすべて数値の列は、見出しも右寄せにして値とそろえる（1列目は行の見出しなので除く）
+    num_cols = {
+        i for i in range(1, len(head))
+        if body_rows and all(i < len(r) and NUM_CELL.match(r[i]) for r in body_rows)
+    }
     out = ['<div class="table-wrap"><table>', "<thead><tr>"]
-    out += [f'<th scope="col">{inline(c)}</th>' for c in head]
+    num_attr = ' class="num"'
+    out += [f'<th scope="col"{num_attr if i in num_cols else ""}>{inline(c)}</th>' for i, c in enumerate(head)]
     out.append("</tr></thead><tbody>")
     for r in body_rows:
         out.append("<tr>")
