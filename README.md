@@ -6,7 +6,13 @@
 - 出力：デジタル庁デザインシステム（DADS）に沿ったHTMLのレポート（Artifactとして公開できる環境では公開する）
 - すべての記述に根拠の場所（PDFのページ、節、図表）を付け、原文の引用は本文と機械で照合する
 - 分析者の評価や、読み手の研究への示唆は書かない。論文に書かれていないことは「記載がない」と書く
-- 日本語は [docs-rules](https://github.com/knk1313/docs-rules) で校正する。トークンを使いすぎないよう、既定では機械の採点と1回の書き直しだけを行う
+- 日本語は[docs-rules](https://github.com/knk1313/docs-rules)で校正する。トークンを使いすぎないよう、既定では機械の採点と1回の書き直しだけを行う
+
+論文を読む前に中身を正確に押さえたい人、輪読やゼミの準備をする人に向けたスキルです。
+
+![架空の論文で作ったレポートの見本](docs/screenshot.png)
+
+画像は、架空の論文で作った見本（[docs/sample-report.md](docs/sample-report.md)）を表示したものです。
 
 ## 入れ方
 
@@ -30,14 +36,14 @@ https://arxiv.org/abs/<arXiv ID> を読み解いて
 DOI <DOI> の論文の中身を押さえたい
 ```
 
-スキルが使われないときは、`/paper-analysis` と打って呼び出してください。
+スキルが使われないときは、`/paper-analysis`と打って呼び出してください。
 
-AIによる評価を含めて丁寧に校正したいときは「しっかり校正して」と添えてください。費用の上限は既定で0.50ドルで、環境変数 `PAPER_ANALYSIS_PROOF_BUDGET_USD` で変えられます。
+AIによる評価を含めて丁寧に校正したいときは「しっかり校正して」と添えてください。費用の上限は既定で0.50ドルで、環境変数`PAPER_ANALYSIS_PROOF_BUDGET_USD`で変えられます。
 
 ## 必要なもの
 
 - Python 3.9以上（スクリプトは標準ライブラリーだけで動きます）
-- `pdftotext`（poppler）。なくても動きますが、引用の照合の精度が下がります。macOSでは `brew install poppler`
+- `pdftotext`（poppler）。なくても動きますが、引用の照合の精度が下がります。macOSでは`brew install poppler`
 - 校正に使う場合：Node.js 18以上とdocs-rules
 
 ## 構成
@@ -50,7 +56,18 @@ AIによる評価を含めて丁寧に校正したいときは「しっかり校
 | `skills/paper-analysis/scripts/proof.py` | docs-rulesの採点を、出力を絞って実行する |
 | `skills/paper-analysis/scripts/render_html.py` | 原稿のMarkdownをHTMLにする |
 | `skills/paper-analysis/assets/template.html` | HTMLのテンプレート（DADSのトークン） |
+| `tests/` | スクリプトのテスト。入力は架空の論文 |
+| `docs/` | READMEの画像と、その元にした見本の原稿 |
+| `ci/plugin-validate/` | CIでプラグインの設定を検証するときに使うClaude Codeの版 |
+
+## 開発
+
+```bash
+python3 -m unittest discover -s tests
+```
+
+変更の出し方は[CONTRIBUTING.md](CONTRIBUTING.md)、脆弱性の報告は[SECURITY.md](SECURITY.md)を見てください。
 
 ## ライセンス
 
-MIT
+[MIT](LICENSE)。レポートに引用される論文の本文の権利は、それぞれの著者と出版社にあります。
