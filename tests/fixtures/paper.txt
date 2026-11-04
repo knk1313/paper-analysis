@@ -1,0 +1,11 @@
+Sample Paper on Deliberation Summaries
+Taro Example and Hanako Example
+
+Abstract
+We study how summaries of public deliberation represent minority opinions.
+Our method improves coverage of minority opin-
+ions in every setting we tested.
+2
+3 Results
+The correlation with human ratings was 0.91 on the
+validation set.
