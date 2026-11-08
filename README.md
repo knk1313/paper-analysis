@@ -77,8 +77,6 @@ AIによる評価を含めて丁寧に校正したいときは「しっかり校
 python3 -m unittest discover -s tests
 ```
 
-変更の出し方は[CONTRIBUTING.md](CONTRIBUTING.md)、脆弱性の報告は[SECURITY.md](SECURITY.md)を見てください。
+## 引用する論文の権利
 
-## ライセンス
-
-[MIT](LICENSE)。レポートに引用される論文の本文の権利は、それぞれの著者と出版社にあります。
+レポートに引用される論文の本文の権利は、それぞれの著者と出版社にあります。
