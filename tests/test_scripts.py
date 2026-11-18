@@ -73,6 +73,39 @@ class RenderHtmlTest(unittest.TestCase):
         self.assertIn(':root[data-theme="dark"]', self.html)
 
 
+class RenderLooseListTest(unittest.TestCase):
+    """番号のあとに空白がない番号付きの行の扱い。"""
+
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location("render_html", SCRIPTS / "render_html.py")
+        cls.render = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.render)
+
+    def body(self, md: str) -> str:
+        return self.render.convert("## 節\n\n" + md)[2]
+
+    def test_consecutive_lines_become_list(self):
+        html = self.body("1.単語を1つ読む\n2.表にあれば頻度を1増やす\n3．なければ頻度1で登録する\n")
+        self.assertIn("<ol><li>単語を1つ読む</li><li>表にあれば頻度を1増やす</li><li>なければ頻度1で登録する</li></ol>", html)
+
+    def test_list_after_paragraph_line(self):
+        html = self.body("手順は次のとおりである。\n1.読む\n2.登録する\n")
+        self.assertIn("<p>手順は次のとおりである。</p><ol><li>読む</li><li>登録する</li></ol>", html)
+
+    def test_single_line_stays_paragraph(self):
+        html = self.body("1.読むだけの手順である。\n")
+        self.assertIn("<p>1.読むだけの手順である。</p>", html)
+
+    def test_decimal_number_is_not_list(self):
+        html = self.body("1.5倍に向上した。\n2.0倍の条件もある。\n")
+        self.assertNotIn("<ol>", html)
+
+    def test_code_block_is_untouched(self):
+        html = self.body("```\n1.読む\n2.登録する\n```\n")
+        self.assertIn("<pre><code>1.読む\n2.登録する</code></pre>", html)
+
+
 class ProofFilterTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

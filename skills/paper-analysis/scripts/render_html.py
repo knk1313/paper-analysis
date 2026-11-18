@@ -7,7 +7,7 @@
 外部のライブラリーは使わない。原稿で使う記法だけに対応する。
 - `# ` タイトル（1個）。直後の段落は副題になる
 - `## ` 節（目次に載る）、`### ` `#### ` 小見出し
-- 段落、箇条書き（`- ` と `1. `、2段まで）、表（`| a | b |`）、コードブロック、`---`
+- 段落、箇条書き（`- ` と `1. `、2段まで。番号のあとに空白がない `1.` も、2行以上続けば箇条書きにする）、表（`| a | b |`）、コードブロック、`---`
 - 引用：`> 原文："..."` は原文の引用として、`> 論文外の補足：...` は注意の枠として表示する
 - 行内：`**太字**`、`` `コード` ``、`[文字](URL)`、裸の URL、根拠の場所 `〔...〕`
 """
@@ -101,6 +101,37 @@ def render_quote(lines: list[str]) -> str:
 
 
 LIST_ITEM = re.compile(r"^(\s*)([-*]|\d+[.)])\s+(.*)$")
+# 番号のあとに空白がない番号付きの行（`1.読む`、`2．登録する`）。`1.5倍` のような数字の続きは除く
+LOOSE_OL_ITEM = re.compile(r"^(\s*)(\d+)[.)．）](?![\d\s])(.*)$")
+
+
+def normalize_loose_lists(lines: list[str]) -> list[str]:
+    """番号のあとに空白がない行が2行以上続くときだけ、`1. ` の形に直して箇条書きとして扱えるようにする。
+
+    1行だけなら、数字で始まる普通の文かもしれないので段落のまま残す。コードブロックの中は触らない。
+    """
+    out = list(lines)
+    in_code = False
+    run: list[int] = []
+
+    def flush() -> None:
+        if len(run) >= 2:
+            for j in run:
+                m = LOOSE_OL_ITEM.match(out[j])
+                out[j] = f"{m.group(1)}{m.group(2)}. {m.group(3)}"
+        run.clear()
+
+    for j, line in enumerate(lines):
+        if line.strip().startswith("```"):
+            flush()
+            in_code = not in_code
+            continue
+        if not in_code and LOOSE_OL_ITEM.match(line):
+            run.append(j)
+        else:
+            flush()
+    flush()
+    return out
 
 
 def render_list(lines: list[str]) -> str:
@@ -133,7 +164,7 @@ def render_list(lines: list[str]) -> str:
 
 
 def convert(md: str) -> tuple[str, str, str, list[tuple[str, str]]]:
-    lines = md.splitlines()
+    lines = normalize_loose_lists(md.splitlines())
     title, subtitle = "論文分析レポート", ""
     sections: list[tuple[str, str, list[str]]] = []  # (id, 見出し, 本文の HTML の断片)
     preamble: list[str] = []
